@@ -1,2 +1,7 @@
+### General files ###
 .idea
 ProjectZero.iml
+
+### Backend files ###
+backend/.env
+backend/node_modules
