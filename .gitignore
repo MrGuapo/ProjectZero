@@ -5,3 +5,5 @@ ProjectZero.iml
 ### Backend files ###
 backend/.env
 backend/node_modules
+backend/package.json
+backend/package-lock.json
