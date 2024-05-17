@@ -1,29 +1,30 @@
-import auth from "../middlewares/auth.js";
+import {signupAuth, loginAuth} from "../middlewares/auth.js";
+import {createToken, createRefreshToken} from '../middlewares/jwt.js';
 
-const signup = async (req, res) => {
+export const signup = async (req, res) => {
     const {username, email, password} = req.body;
 
     try {
-        const user = await auth.signup(username, email, password);
+        const user = await signupAuth(username, email, password);
 
-        // // create access token
-        // const accessToken = auth.createAccessToken(user);
-        //
-        // // create refresh token
-        // const refreshToken = auth.createRefreshToken(user);
-        //
-        // // store tokens in cookies
-        // res.cookie('accessToken', accessToken, {
-        //     httpOnly: true,
-        //     secure: false,
-        //     sameSite: 'strict',
-        // });
-        //
-        // res.cookie('refreshToken', refreshToken, {
-        //     httpOnly: true,
-        //     secure: false,
-        //     sameSite: 'strict'
-        // });
+        // create access token
+        const accessToken = createToken(user);
+
+        // create refresh token
+        const refreshToken = createRefreshToken(user);
+
+        // store tokens in cookies
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict'
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict'
+        });
 
         res.status(200).json({
             _id: user._id,
@@ -35,30 +36,30 @@ const signup = async (req, res) => {
     }
 }
 
-const login = async (req, res) => {
+export const login = async (req, res) => {
     const {username, password} = req.body;
 
     try {
-        const user = await auth.login(username, password);
+        const user = await loginAuth(username, password);
 
-        // // create access token
-        // const accessToken = auth.createAccessToken(user);
-        //
-        // // create refresh token
-        // const refreshToken = auth.createRefreshToken(user);
-        //
-        // // store tokens in cookies
-        // res.cookie('accessToken', accessToken, {
-        //     httpOnly: true,
-        //     secure: false,
-        //     sameSite: 'strict',
-        // });
-        //
-        // res.cookie('refreshToken', refreshToken, {
-        //     httpOnly: true,
-        //     secure: false,
-        //     sameSite: 'strict'
-        // });
+        // create access token
+        const accessToken = createToken(user);
+
+        // create refresh token
+        const refreshToken = createRefreshToken(user);
+
+        // store tokens in cookies
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict'
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict'
+        });
 
         res.status(200).json({
             _id: user._id,
@@ -70,6 +71,8 @@ const login = async (req, res) => {
     }
 }
 
-export default {
-    signup, login
-};
+export const logout = (req, res) => {
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+    res.status(200).json({message: 'User logged out.'});
+}
