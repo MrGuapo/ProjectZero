@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from "./database/dbConnection.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -12,7 +13,7 @@ connectDB();
 app.use(express.json());
 
 // routes
-
+app.use(authRoutes);
 
 // start server
 app.listen(process.env.PORT, () => {
